@@ -19,3 +19,4 @@ Route::get('/', function () {
 });
 
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::post('/verification', [UserController::class, 'verification'])->name('verification');

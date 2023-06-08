@@ -11,8 +11,12 @@
 </head>
 <body class="container">
     <div class="row m-2">
+
         <div class="col-md-12 my-2">
-            <button class="btn btn-primary">Verifikasi</button>
+            <div id="spinner" class="spinner-border text-primary d-none" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <button id="button" class="btn btn-primary" onclick="doVerification()">Verifikasi</button>
         </div>
         <div class="col-md-12">
             <div id="progress-row" class="row" >
@@ -39,6 +43,7 @@
                         <th>Status Verifikasi</th>
                     </tr>
                 </thead>
+                <tbody></tbody>
             </table>
         </div>
     </div>
@@ -48,8 +53,36 @@
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 
     <script>
+        let table = ""
         $(document).ready(function() {
-            $('#data-table').DataTable({
+            initializeTable()
+        });
+
+        function doVerification() {
+            $('#spinner').removeClass('d-none')
+            $('#button').addClass('d-none')
+
+            $.ajax({
+                url: `{{ route('verification') }}`,
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    $('#spinner').addClass('d-none')
+                    $('#button').removeClass('d-none')
+                    reinitializeTable()
+                },
+                error: function(error) {
+                    $('#spinner').addClass('d-none')
+                    $('#button').removeClass('d-none')
+                    alert('Error')
+                }
+            })
+        }
+
+        function initializeTable() {
+            table = $('#data-table').DataTable({
                 processing: true,
                 searching: true,
                 serverSide: true,
@@ -83,7 +116,12 @@
                     },
                 ],
             });
-        });
+        }
+
+        function reinitializeTable(){
+            $('#data-table').DataTable().clear().destroy()
+            initializeTable()
+        }
 
     </script>
 </body>
