@@ -16,18 +16,18 @@
             <div id="spinner" class="spinner-border text-primary d-none" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
-            <button id="button" class="btn btn-primary" onclick="doVerification()">Verifikasi</button>
+            <button id="button" class="btn btn-primary" onclick="doVerification()">Verification</button>
         </div>
         <div class="col-md-12">
-            <div id="progress-row" class="row" >
+            <div id="progress-row" class="row" style="display: none">
                 <div class="col-md-12">
                     <span id="progress-nama-pegawai">Verification - </span>
                 </div>
                 <div class="col-md-12">
                     <div id="progress-bar" class="progress my-3">
                         <div id="dynamic" class="progress-bar progress-bar-success progress-bar-striped active"
-                            role="progressbar" aria-valuenow="12" aria-valuemin="0" aria-valuemax="100" style="width: 10%">
-                            <span id="current-progress">12%</span>
+                            role="progressbar" aria-valuenow="12" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                            <span id="current-progress">0<span>
                         </div>
                     </div>
                 </div>
@@ -52,6 +52,31 @@
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 
+    <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+    <script>
+        var pusher = new Pusher('b5ef13fb08817fecb0f7', {
+        cluster: 'mt1'
+        });
+
+        var channel = pusher.subscribe('channel-job-batching');
+        channel.bind('broadcast-job-batching', function(data) {
+            $('#progress-row').show()
+
+            $('#dynamic').attr('aria-valuenow', data.progress)
+            $('#dynamic').css("width", `${data.progress}%`)
+            $('#current-progress').text(`${data.progress} %`)
+            $('#progress-nama-pegawai').text(`Verification : ${data.data.name}`)
+
+            if (data.progress == 99) {
+                $('#progress-row').hide()
+                $('#spinner').addClass('d-none')
+                $('#button').removeClass('d-none')
+                reinitializeTable()
+            }
+
+        });
+    </script>
+
     <script>
         let table = ""
         $(document).ready(function() {
@@ -69,9 +94,7 @@
                     'X-CSRF-TOKEN': "{{ csrf_token() }}"
                 },
                 success: function(response) {
-                    $('#spinner').addClass('d-none')
-                    $('#button').removeClass('d-none')
-                    reinitializeTable()
+                    //
                 },
                 error: function(error) {
                     $('#spinner').addClass('d-none')
@@ -108,9 +131,9 @@
                         name: 'is_verification',
                         render: function(data, type, row) {
                             if (data == 0) {
-                                return `<span class="badge bg-danger">Belum Verifikasi</span>`;
+                                return `<span class="badge bg-danger">Not Verified</span>`;
                             } else {
-                                return `<span class="badge bg-success">Sudah Verifikasi</span>`;
+                                return `<span class="badge bg-success">Verified</span>`;
                             }
                         }
                     },

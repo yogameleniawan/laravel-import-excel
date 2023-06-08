@@ -1,7 +1,9 @@
 <?php
 
+use App\Events\VerificationEvent;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use YogaMeleniawan\JobBatchingWithRealtimeProgress\Events\StatusJobEvent;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +22,17 @@ Route::get('/', function () {
 
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
 Route::post('/verification', [UserController::class, 'verification'])->name('verification');
+
+Route::get('/test-event', function() {
+    event(new StatusJobEvent(
+        finished: false,
+        progress: 10,
+        pending: 100,
+        total: 110,
+        data: 'channel-verification',
+    ));
+
+    // event(new VerificationEvent('test event'));
+
+    dd('event sent');
+});

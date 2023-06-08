@@ -36,13 +36,10 @@ class UserController extends Controller
     }
 
     public function verification() {
-        $this->realtimeJob->execute(
-            name: 'User Verification',
-            option: null,
-            channel_name: 'user-verification',
-            broadcast_name: 'user-verification'
+        $batch = RealtimeJobBatch::execute(
+            name: 'User Verification'
         );
 
-        return response()->json(['message' => 'User verification is running in background'], 200);
+        return response()->json(['message' => 'User verification is running in background', 'batch' => $batch], 200);
     }
 }
