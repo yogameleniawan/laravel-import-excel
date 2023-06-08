@@ -40,7 +40,7 @@
                         <th>Id</th>
                         <th>Name</th>
                         <th>Email</th>
-                        <th>Status Verifikasi</th>
+                        <th>Verification Status</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -65,7 +65,7 @@
             $('#dynamic').attr('aria-valuenow', data.progress)
             $('#dynamic').css("width", `${data.progress}%`)
             $('#current-progress').text(`${data.progress} %`)
-            $('#progress-nama-pegawai').text(`Verification : ${data.data.name}`)
+            $('#progress-nama-pegawai').text(`Verification (${data.pending}/${data.total}): ${data.data.name}`)
 
             if (data.progress == 99) {
                 $('#progress-row').hide()
