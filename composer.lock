@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c6437be159409b8e123c09872b081641",
+    "content-hash": "f81c7366b8558fd390609d5906b14cbd",
     "packages": [
         {
             "name": "brick/math",
@@ -6161,6 +6161,42 @@
                 }
             ],
             "time": "2023-02-20T06:45:10+00:00"
+        },
+        {
+            "name": "yogameleniawan/realtime-job-batching",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yogameleniawan/job-batching-with-realtime-progress.git",
+                "reference": "d24b73446b423a9d45b7807247640c6a90a225d0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yogameleniawan/job-batching-with-realtime-progress/zipball/d24b73446b423a9d45b7807247640c6a90a225d0",
+                "reference": "d24b73446b423a9d45b7807247640c6a90a225d0",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "YogaMeleniawan\\JobBatchingWithRealtimeProgress\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Yoga Meleniawan Pamungkas"
+                }
+            ],
+            "description": "Job Batching with Realtime Progress using Pusher for Laravel",
+            "support": {
+                "issues": "https://github.com/yogameleniawan/job-batching-with-realtime-progress/issues",
+                "source": "https://github.com/yogameleniawan/job-batching-with-realtime-progress/tree/v1.0.0"
+            },
+            "time": "2023-06-08T07:59:00+00:00"
         }
     ],
     "packages-dev": [
