@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Repositories\UnverificationRepository;
+use App\Repositories\VerificationRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
@@ -16,8 +18,6 @@ class UserController extends Controller
      * @return void
      */
     public function __construct(
-        private RealtimeJobBatch $realtimeJob,
-
     )
     {
         //
@@ -36,9 +36,9 @@ class UserController extends Controller
     }
 
     public function verification() {
-        $batch = RealtimeJobBatch::execute(
-            name: 'User Verification'
-        );
+
+        $batch = RealtimeJobBatch::setRepository(new VerificationRepository())
+                    ->execute(name: 'User Verification');
 
         return response()->json(['message' => 'User verification is running in background', 'batch' => $batch], 200);
     }

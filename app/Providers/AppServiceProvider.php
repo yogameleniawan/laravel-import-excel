@@ -11,7 +11,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind("YogaMeleniawan\JobBatchingWithRealtimeProgress\Interfaces\\RealtimeJobBatchInterface", "App\Repositories\\VerificationRepository");
+        //
     }
 
     /**
