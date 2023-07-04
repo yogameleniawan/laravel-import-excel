@@ -60,6 +60,7 @@
 
         var channel = pusher.subscribe('channel-job-batching');
         channel.bind('broadcast-job-batching', function(data) {
+            console.log(data)
             $('#progress-row').show()
 
             $('#dynamic').attr('aria-valuenow', data.progress)

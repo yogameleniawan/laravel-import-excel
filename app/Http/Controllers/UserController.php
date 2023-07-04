@@ -40,6 +40,10 @@ class UserController extends Controller
         $batch = RealtimeJobBatch::setRepository(new VerificationRepository())
                     ->execute(name: 'User Verification');
 
-        return response()->json(['message' => 'User verification is running in background', 'batch' => $batch], 200);
+        return response()
+            ->json([
+                'message' => 'User verification is running in background',
+                'batch' => $batch
+            ], 200);
     }
 }
