@@ -11,12 +11,13 @@
 </head>
 <body class="container">
     <div class="row m-2">
-
+        <div id="message"></div>
         <div class="col-md-12 my-2">
             <div id="spinner" class="spinner-border text-primary d-none" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
-            <button id="button" class="btn btn-primary" onclick="doVerification()">Verification</button>
+            <button id="button" class="btn btn-success" onclick="verificationUserJob()">Verification - Queue</button>
+            <button id="button" class="btn btn-danger" onclick="verificationUserWithoutJob()">Verification - Without Queue</button>
         </div>
         <div class="col-md-12">
             <div id="progress-row" class="row" style="display: none">
@@ -84,7 +85,8 @@
             initializeTable()
         });
 
-        function doVerification() {
+        function verificationUserJob() {
+            $('#message').html('')
             $('#spinner').removeClass('d-none')
             $('#button').addClass('d-none')
 
@@ -94,8 +96,39 @@
                 headers: {
                     'X-CSRF-TOKEN': "{{ csrf_token() }}"
                 },
+                data: {
+                    'type': 'job'
+                },
                 success: function(response) {
                     //
+                    $('#message').html(`<div class="alert alert-success" role="alert">${response.message} </div>`)
+                },
+                error: function(error) {
+                    $('#spinner').addClass('d-none')
+                    $('#button').removeClass('d-none')
+                    alert('Error')
+                }
+            })
+        }
+
+        function verificationUserWithoutJob() {
+            $('#message').html('')
+            $('#spinner').removeClass('d-none')
+            $('#button').addClass('d-none')
+
+            $.ajax({
+                url: `{{ route('verification') }}`,
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                data: {
+                    'type': 'without_job'
+                },
+                success: function(response) {
+                    $('#message').html(`<div class="alert alert-success" role="alert">User verification on progress </div>`)
+                    $('#spinner').addClass('d-none')
+                    $('#button').removeClass('d-none')
                 },
                 error: function(error) {
                     $('#spinner').addClass('d-none')
