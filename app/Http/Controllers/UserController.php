@@ -39,6 +39,7 @@ class UserController extends Controller
     {
         if ($request->type == 'job') {
 
+            // menggunakan job
             $batch = RealtimeJobBatch::setRepository(new VerificationRepository())
                 ->execute(name: 'User Verification');
 
@@ -48,6 +49,8 @@ class UserController extends Controller
                     'batch' => $batch
                 ], 200);
         } else {
+
+            // tanpa job
             $users = User::where('is_verification', false)->get();
 
             foreach ($users as $user) {
