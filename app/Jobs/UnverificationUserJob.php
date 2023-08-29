@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 
 class UnverificationUserJob implements ShouldQueue
 {
@@ -27,12 +28,17 @@ class UnverificationUserJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $users = User::where('is_verification', true)->get();
+        DB::beginTransaction();
 
-        foreach ($users as $user) {
-            $user->update([
-                'is_verification' => false
-            ]);
+        try {
+            DB::table('users')
+                ->update([
+                    'is_verification' => false,
+                ]);
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
         }
     }
 }

@@ -69,7 +69,7 @@
             $('#current-progress').text(`${data.progress} %`)
             $('#progress-nama-pegawai').text(`Verifikasi User (${data.pending}/${data.total}): ${data.data.name}`)
 
-            if (data.progress == 99) {
+            if (data.progress == 100) {
                 $('#progress-row').hide()
                 $('#spinner').addClass('d-none')
                 $('#button').removeClass('d-none')

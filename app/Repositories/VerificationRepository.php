@@ -11,7 +11,6 @@ class VerificationRepository implements RealtimeJobBatchInterface
 {
     public function get_all(): Collection
     {
-        // get all user
         $sql = "SELECT * FROM users";
 
         return collect(DB::select($sql));
@@ -19,11 +18,18 @@ class VerificationRepository implements RealtimeJobBatchInterface
 
     public function save($data): void
     {
-        // your own business logic here
-        DB::table('users')
-            ->where('id', $data->id)
-            ->update([
-                'is_verification' => true,
-            ]);
+        DB::beginTransaction();
+
+        try {
+            DB::table('users')
+                ->where('id', $data->id)
+                ->update([
+                    'is_verification' => true,
+                ]);
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+        }
     }
 }
