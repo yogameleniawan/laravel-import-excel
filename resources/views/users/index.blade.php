@@ -16,13 +16,13 @@
             <div id="spinner" class="spinner-border text-primary d-none" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
-            <button id="button" class="btn btn-success" onclick="verificationUserJob()">Verification - Queue</button>
-            <button id="button" class="btn btn-danger" onclick="verificationUserWithoutJob()">Verification - Without Queue</button>
+            <button id="button" class="btn btn-success" onclick="verificationUserJob()">Verifikasi user dengan indikator proses</button>
+            <button id="button" class="btn btn-danger" onclick="verificationUserWithoutJob()">Unverifikasi user tanpa indikator proses</button>
         </div>
         <div class="col-md-12">
             <div id="progress-row" class="row" style="display: none">
                 <div class="col-md-12">
-                    <span id="progress-nama-pegawai">Verification - </span>
+                    <span id="progress-nama-pegawai">Verifikasi User - </span>
                 </div>
                 <div class="col-md-12">
                     <div id="progress-bar" class="progress my-3">
@@ -39,9 +39,9 @@
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Name</th>
+                        <th>Nama</th>
                         <th>Email</th>
-                        <th>Verification Status</th>
+                        <th>Status Verifikasi</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -55,8 +55,8 @@
 
     <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
     <script>
-        var pusher = new Pusher('b5ef13fb08817fecb0f7', {
-        cluster: 'mt1'
+        var pusher = new Pusher('934e682649944efa8625', {
+        cluster: 'ap1'
         });
 
         var channel = pusher.subscribe('channel-job-batching');
@@ -67,7 +67,7 @@
             $('#dynamic').attr('aria-valuenow', data.progress)
             $('#dynamic').css("width", `${data.progress}%`)
             $('#current-progress').text(`${data.progress} %`)
-            $('#progress-nama-pegawai').text(`Verification (${data.pending}/${data.total}): ${data.data.name}`)
+            $('#progress-nama-pegawai').text(`Verifikasi User (${data.pending}/${data.total}): ${data.data.name}`)
 
             if (data.progress == 99) {
                 $('#progress-row').hide()
@@ -126,7 +126,7 @@
                     'type': 'without_job'
                 },
                 success: function(response) {
-                    $('#message').html(`<div class="alert alert-success" role="alert">User verification on progress </div>`)
+                    $('#message').html(`<div class="alert alert-success" role="alert">${response.message} </div>`)
                     $('#spinner').addClass('d-none')
                     $('#button').removeClass('d-none')
                 },
@@ -165,9 +165,9 @@
                         name: 'is_verification',
                         render: function(data, type, row) {
                             if (data == 0) {
-                                return `<span class="badge bg-danger">Not Verified</span>`;
+                                return `<span class="badge bg-danger">Tidak Terverifikasi</span>`;
                             } else {
-                                return `<span class="badge bg-success">Verified</span>`;
+                                return `<span class="badge bg-success">Terverifikasi</span>`;
                             }
                         }
                     },

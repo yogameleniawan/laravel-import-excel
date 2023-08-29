@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\UnverificationUserJob;
 use App\Models\User;
 use App\Repositories\UnverificationRepository;
 use App\Repositories\VerificationRepository;
@@ -38,30 +39,20 @@ class UserController extends Controller
     public function verification(Request $request)
     {
         if ($request->type == 'job') {
-
-            // menggunakan job
             $batch = RealtimeJobBatch::setRepository(new VerificationRepository())
                 ->execute(name: 'User Verification');
 
             return response()
                 ->json([
-                    'message' => 'User verification is running in background',
+                    'message' => 'Proses Verifikasi User sedang berjalan',
                     'batch' => $batch
                 ], 200);
         } else {
-
-            // tanpa job
-            $users = User::where('is_verification', false)->get();
-
-            foreach ($users as $user) {
-                $user->update([
-                    'is_verification' => true
-                ]);
-            }
+            UnverificationUserJob::dispatch();
 
             return response()
                 ->json([
-                    'message' => 'User verification is done',
+                    'message' => 'Proses Unverifikasi User sedang berjalan',
                 ], 200);
         }
     }
