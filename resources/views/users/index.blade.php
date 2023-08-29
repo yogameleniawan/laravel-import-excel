@@ -68,11 +68,13 @@
             $('#dynamic').css("width", `${data.progress}%`)
             $('#current-progress').text(`${data.progress} %`)
             $('#progress-nama-pegawai').text(`Verifikasi User (${data.pending}/${data.total}): ${data.data.name}`)
+            $('title').text(`Verifikasi (${data.pending}/${data.total}): ${data.progress}%`)
 
             if (data.progress == 100) {
                 $('#progress-row').hide()
                 $('#spinner').addClass('d-none')
                 $('#button').removeClass('d-none')
+                $('title').text(`Users`)
                 reinitializeTable()
             }
 
