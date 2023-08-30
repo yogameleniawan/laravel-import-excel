@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\UsersImport;
+use App\Jobs\ImportFinishedJob;
 use App\Jobs\UnverificationUserJob;
 use App\Models\User;
 use App\Repositories\UnverificationRepository;
@@ -65,13 +66,7 @@ class UserController extends Controller
 
         try {
             (new UsersImport())->import($file)->chain([
-                event(new StatusJobEvent(
-                    finished: true,
-                    progress: 0,
-                    pending: 0,
-                    total: 0,
-                    data: ''
-                ))
+                new ImportFinishedJob()
             ]);
 
             return response()->json(['message' => 'Data sedang diimport', 'status' => 'success'], 200);

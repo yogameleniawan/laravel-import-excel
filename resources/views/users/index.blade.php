@@ -44,7 +44,10 @@
                 <tbody></tbody>
             </table>
         </div>
-        <div id="import" class="col-md-4 my-4">
+        <div class="col-md-4 my-4">
+            <div id="spinner" class="spinner-border text-primary d-none" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
             <div class="form-group">
                     <form id="form" enctype="multipart/form-data">
                         <label for="formFile" class="form-label">Import File (Excel)</label>
@@ -68,11 +71,15 @@
         channel.bind('broadcast-job-batching', function(data) {
             console.log(data)
             if (data.finished == true) {
-                $('#message').html(`<div class="alert alert-success" role="alert">Proses Verifikasi Selesai</div>`)
+                $('#message').html(`<div class="alert alert-success" role="alert">Proses Sudah Selesai</div>`)
                 $('#progress-row').hide()
                 $('#button-verif').html(`Verifikasi user dengan indikator proses`)
                 $('title').text(`Users`)
                 $('#button-verif').attr('disabled', false)
+
+                $('#form').removeClass('d-none')
+                $('#spinner').addClass('d-none')
+
                 reinitializeTable()
             } else {
                 $('#progress-row').show()
@@ -80,8 +87,8 @@
                 $('#dynamic').attr('aria-valuenow', data.progress)
                 $('#dynamic').css("width", `${data.progress}%`)
                 $('#current-progress').text(`${data.progress} %`)
-                $('#progress-nama-pegawai').text(`User (${data.pending}/${data.total}): ${data.data.name}`)
-                $('title').text(`(${data.pending}/${data.total}): ${data.progress}%`)
+                $('#progress-nama-pegawai').text(`Proses (${data.pending}/${data.total}): ${data.data.name}`)
+                $('title').text(`Proses (${data.pending}/${data.total}): ${data.progress}%`)
             }
 
         });
@@ -147,6 +154,8 @@
 
         function importUser(e) {
             $('#message').html('')
+            $('#form').addClass('d-none')
+            $('#spinner').removeClass('d-none')
 
             let formData = new FormData();
             formData.append('excel', e.files[0])
