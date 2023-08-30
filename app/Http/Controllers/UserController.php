@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\UsersImport;
 use App\Jobs\UnverificationUserJob;
 use App\Models\User;
 use App\Repositories\UnverificationRepository;
@@ -9,6 +10,7 @@ use App\Repositories\VerificationRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
+use YogaMeleniawan\JobBatchingWithRealtimeProgress\Events\StatusJobEvent;
 use YogaMeleniawan\JobBatchingWithRealtimeProgress\RealtimeJobBatch;
 
 class UserController extends Controller
@@ -54,6 +56,27 @@ class UserController extends Controller
                 ->json([
                     'message' => 'Proses Unverifikasi User sedang berjalan',
                 ], 200);
+        }
+    }
+
+    public function import(Request $request)
+    {
+        $file = $request->excel;
+
+        try {
+            (new UsersImport())->import($file)->chain([
+                event(new StatusJobEvent(
+                    finished: true,
+                    progress: 0,
+                    pending: 0,
+                    total: 0,
+                    data: ''
+                ))
+            ]);
+
+            return response()->json(['message' => 'Data sedang diimport', 'status' => 'success'], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage(), 'status' => 'error'], 500);
         }
     }
 }

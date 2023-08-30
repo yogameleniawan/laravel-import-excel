@@ -44,6 +44,14 @@
                 <tbody></tbody>
             </table>
         </div>
+        <div id="import" class="col-md-4 my-4">
+            <div class="form-group">
+                    <form id="form" enctype="multipart/form-data">
+                        <label for="formFile" class="form-label">Import File (Excel)</label>
+                        <input class="form-control" type="file" name="file" id="file" onchange="importUser(this)">
+                    </form>
+            </div>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
@@ -72,8 +80,8 @@
                 $('#dynamic').attr('aria-valuenow', data.progress)
                 $('#dynamic').css("width", `${data.progress}%`)
                 $('#current-progress').text(`${data.progress} %`)
-                $('#progress-nama-pegawai').text(`Verifikasi User (${data.pending}/${data.total}): ${data.data.name}`)
-                $('title').text(`Verifikasi (${data.pending}/${data.total}): ${data.progress}%`)
+                $('#progress-nama-pegawai').text(`User (${data.pending}/${data.total}): ${data.data.name}`)
+                $('title').text(`(${data.pending}/${data.total}): ${data.progress}%`)
             }
 
         });
@@ -133,6 +141,33 @@
                     $(e).html(`Unverifikasi user tanpa indikator proses`)
                     alert('Error')
                     $(e).attr('disabled', false)
+                }
+            })
+        }
+
+        function importUser(e) {
+            $('#message').html('')
+
+            let formData = new FormData();
+            formData.append('excel', e.files[0])
+
+            $.ajax({
+                async: true,
+                url: `{{ route('import') }}`,
+                type: "POST",
+                dataType: "json",
+                cache: false,
+                contentType: false,
+                processData: false,
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                data: formData,
+                success: function(response) {
+                    $('#message').html(`<div class="alert alert-success" role="alert">${response.message} </div>`)
+                },
+                error: function(error) {
+                    alert('Error')
                 }
             })
         }

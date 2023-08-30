@@ -22,8 +22,9 @@ Route::get('/', function () {
 
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
 Route::post('/verification', [UserController::class, 'verification'])->name('verification');
+Route::post('/import', [UserController::class, 'import'])->name('import');
 
-Route::get('/test-event', function() {
+Route::get('/test-event', function () {
     event(new StatusJobEvent(
         finished: false,
         progress: 10,
