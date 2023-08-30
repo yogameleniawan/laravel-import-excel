@@ -13,11 +13,8 @@
     <div class="row m-2">
         <div id="message"></div>
         <div class="col-md-12 my-2">
-            <div id="spinner" class="spinner-border text-primary d-none" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <button id="button" class="btn btn-success" onclick="verificationUserJob()">Verifikasi user dengan indikator proses</button>
-            <button id="button" class="btn btn-danger" onclick="verificationUserWithoutJob()">Unverifikasi user tanpa indikator proses</button>
+            <button id="button-verif" class="btn btn-success" onclick="verificationUserJob(this)">Verifikasi user dengan indikator proses</button>
+            <button id="button" class="btn btn-danger" onclick="verificationUserWithoutJob(this)">Unverifikasi user tanpa indikator proses</button>
         </div>
         <div class="col-md-12">
             <div id="progress-row" class="row" style="display: none">
@@ -63,10 +60,11 @@
         channel.bind('broadcast-job-batching', function(data) {
             console.log(data)
             if (data.finished == true) {
+                $('#message').html(`<div class="alert alert-success" role="alert">Proses Verifikasi Selesai</div>`)
                 $('#progress-row').hide()
-                $('#spinner').addClass('d-none')
-                $('#button').removeClass('d-none')
+                $('#button-verif').html(`Verifikasi user dengan indikator proses`)
                 $('title').text(`Users`)
+                $('#button-verif').attr('disabled', false)
                 reinitializeTable()
             } else {
                 $('#progress-row').show()
@@ -87,10 +85,10 @@
             initializeTable()
         });
 
-        function verificationUserJob() {
+        function verificationUserJob(e) {
+            $(e).html(loader())
+            $(e).attr('disabled', true)
             $('#message').html('')
-            $('#spinner').removeClass('d-none')
-            $('#button').addClass('d-none')
 
             $.ajax({
                 url: `{{ route('verification') }}`,
@@ -102,21 +100,20 @@
                     'type': 'job'
                 },
                 success: function(response) {
-                    //
                     $('#message').html(`<div class="alert alert-success" role="alert">${response.message} </div>`)
                 },
                 error: function(error) {
-                    $('#spinner').addClass('d-none')
-                    $('#button').removeClass('d-none')
+                    $(e).html(`Verifikasi user dengan indikator proses`)
                     alert('Error')
+                    $(e).attr('disabled', false)
                 }
             })
         }
 
-        function verificationUserWithoutJob() {
+        function verificationUserWithoutJob(e) {
+            $(e).html(loader())
+            $(e).attr('disabled', true)
             $('#message').html('')
-            $('#spinner').removeClass('d-none')
-            $('#button').addClass('d-none')
 
             $.ajax({
                 url: `{{ route('verification') }}`,
@@ -129,13 +126,13 @@
                 },
                 success: function(response) {
                     $('#message').html(`<div class="alert alert-success" role="alert">${response.message} </div>`)
-                    $('#spinner').addClass('d-none')
-                    $('#button').removeClass('d-none')
+                    $(e).attr('disabled', false)
+                    $(e).html(`Unverifikasi user tanpa indikator proses`)
                 },
                 error: function(error) {
-                    $('#spinner').addClass('d-none')
-                    $('#button').removeClass('d-none')
+                    $(e).html(`Unverifikasi user tanpa indikator proses`)
                     alert('Error')
+                    $(e).attr('disabled', false)
                 }
             })
         }
@@ -180,6 +177,12 @@
         function reinitializeTable(){
             $('#data-table').DataTable().clear().destroy()
             initializeTable()
+        }
+
+        function loader() {
+            return `<div id="spinner" class="spinner-border text-white spinner-border-sm" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>`
         }
 
     </script>
