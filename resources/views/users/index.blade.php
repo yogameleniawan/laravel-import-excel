@@ -62,20 +62,20 @@
         var channel = pusher.subscribe('channel-job-batching');
         channel.bind('broadcast-job-batching', function(data) {
             console.log(data)
-            $('#progress-row').show()
-
-            $('#dynamic').attr('aria-valuenow', data.progress)
-            $('#dynamic').css("width", `${data.progress}%`)
-            $('#current-progress').text(`${data.progress} %`)
-            $('#progress-nama-pegawai').text(`Verifikasi User (${data.pending}/${data.total}): ${data.data.name}`)
-            $('title').text(`Verifikasi (${data.pending}/${data.total}): ${data.progress}%`)
-
-            if (data.progress == 100) {
+            if (data.finished == true) {
                 $('#progress-row').hide()
                 $('#spinner').addClass('d-none')
                 $('#button').removeClass('d-none')
                 $('title').text(`Users`)
                 reinitializeTable()
+            } else {
+                $('#progress-row').show()
+
+                $('#dynamic').attr('aria-valuenow', data.progress)
+                $('#dynamic').css("width", `${data.progress}%`)
+                $('#current-progress').text(`${data.progress} %`)
+                $('#progress-nama-pegawai').text(`Verifikasi User (${data.pending}/${data.total}): ${data.data.name}`)
+                $('title').text(`Verifikasi (${data.pending}/${data.total}): ${data.progress}%`)
             }
 
         });
