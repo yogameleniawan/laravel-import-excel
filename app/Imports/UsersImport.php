@@ -31,6 +31,12 @@ class UsersImport implements ToCollection, WithHeadingRow, WithChunkReading, Sho
 
             $percent = ($this->progress / $this->total_rows) * 100;
 
+            User::create([
+                'name' => $value['name'],
+                'email' => $value['email'],
+                'password' => $value['password'],
+            ]);
+
             event(new StatusJobEvent(
                 finished: false,
                 progress: (int) $percent,
@@ -38,12 +44,6 @@ class UsersImport implements ToCollection, WithHeadingRow, WithChunkReading, Sho
                 total: $this->total_rows,
                 data: $value
             ));
-
-            User::create([
-                'name' => $value['name'],
-                'email' => $value['email'],
-                'password' => $value['password'],
-            ]);
         }
     }
 
