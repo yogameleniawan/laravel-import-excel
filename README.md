@@ -32,7 +32,15 @@ php artisan migrate
 ```
 php artisan queue:work
 ```
-6. Buka Route /users untuk menampilkan halaman import user
+6. Start Laravel
+```
+php artisan serve
+```
+7. Start Vite
+```
+npm run dev
+```
+8. Buka Route /users untuk menampilkan halaman import user
 
 ## Resources
 - Laravel [Laravel](https://laravel.com/docs/10.x/installation)
