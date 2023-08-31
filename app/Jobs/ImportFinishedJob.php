@@ -2,13 +2,13 @@
 
 namespace App\Jobs;
 
+use App\Events\StatusJobEvent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use YogaMeleniawan\JobBatchingWithRealtimeProgress\Events\StatusJobEvent;
 
 class ImportFinishedJob implements ShouldQueue
 {

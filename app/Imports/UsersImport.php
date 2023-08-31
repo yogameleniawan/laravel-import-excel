@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Events\BeforeImport;
-use YogaMeleniawan\JobBatchingWithRealtimeProgress\Events\StatusJobEvent;
+use App\Events\StatusJobEvent;
 
 class UsersImport implements ToCollection, WithHeadingRow, WithChunkReading, ShouldQueue, WithEvents
 {
