@@ -41,6 +41,17 @@ php artisan serve
 npm run dev
 ```
 8. Buka Route /users untuk menampilkan halaman import user
+9. Untuk API Key bisa membuat pada Pusher [Pusher](https://pusher.com/) yang nanti akan dimasukkan ke dalam file .env. Contoh :
+    
+```
+PUSHER_APP_ID=pusherappid
+PUSHER_APP_KEY=pusherappkey
+PUSHER_APP_SECRET=pusherappsecret
+PUSHER_HOST=host
+PUSHER_PORT=443
+PUSHER_SCHEME=https
+PUSHER_APP_CLUSTER=mt1
+```
 
 ## Resources
 - Laravel [Laravel](https://laravel.com/docs/10.x/installation)
