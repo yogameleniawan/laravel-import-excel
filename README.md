@@ -41,7 +41,7 @@ php artisan serve
 npm run dev
 ```
 8. Buka Route /users untuk menampilkan halaman import user
-9. Untuk API Key bisa membuat pada Pusher [Pusher](https://pusher.com/) yang nanti akan dimasukkan ke dalam file .env. Contoh :
+9. Untuk API Key bisa membuat pada [Pusher](https://pusher.com/) yang nanti akan dimasukkan ke dalam file .env. Contoh :
     
 ```
 PUSHER_APP_ID=pusherappid
