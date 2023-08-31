@@ -12,9 +12,17 @@
 <body class="container">
     <div class="row m-2">
         <div id="message"></div>
-        <div class="col-md-12 my-2">
-            <button id="button-verif" class="btn btn-success" onclick="verificationUserJob(this)">Verifikasi user dengan indikator proses</button>
-            <button id="button" class="btn btn-danger" onclick="verificationUserWithoutJob(this)">Unverifikasi user tanpa indikator proses</button>
+
+        <div class="col-md-4 my-4">
+            <div id="spinner" class="spinner-border text-primary d-none" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="form-group">
+                    <form id="form" enctype="multipart/form-data">
+                        <label for="formFile" class="form-label">Import File (Excel) <a href="{{ url('/excel/excel.xlsx') }}">Download Template</a></label>
+                        <input class="form-control" type="file" name="file" id="file" onchange="importUser(this)">
+                    </form>
+            </div>
         </div>
         <div class="col-md-12">
             <div id="progress-row" class="row" style="display: none">
@@ -44,17 +52,6 @@
                 <tbody></tbody>
             </table>
         </div>
-        <div class="col-md-4 my-4">
-            <div id="spinner" class="spinner-border text-primary d-none" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <div class="form-group">
-                    <form id="form" enctype="multipart/form-data">
-                        <label for="formFile" class="form-label">Import File (Excel)</label>
-                        <input class="form-control" type="file" name="file" id="file" onchange="importUser(this)">
-                    </form>
-            </div>
-        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
@@ -69,13 +66,10 @@
 
         var channel = pusher.subscribe('channel-job-batching');
         channel.bind('broadcast-job-batching', function(data) {
-            console.log(data)
             if (data.finished == true) {
                 $('#message').html(`<div class="alert alert-success" role="alert">Proses Sudah Selesai</div>`)
                 $('#progress-row').hide()
-                $('#button-verif').html(`Verifikasi user dengan indikator proses`)
                 $('title').text(`Users`)
-                $('#button-verif').attr('disabled', false)
                 $('#dynamic').attr('aria-valuenow', 0)
                 $('#dynamic').css("width", `0%`)
                 $('#current-progress').text(`0 %`)
@@ -102,58 +96,6 @@
         $(document).ready(function() {
             initializeTable()
         });
-
-        function verificationUserJob(e) {
-            $(e).html(loader())
-            $(e).attr('disabled', true)
-            $('#message').html('')
-
-            $.ajax({
-                url: `{{ route('verification') }}`,
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                },
-                data: {
-                    'type': 'job'
-                },
-                success: function(response) {
-                    $('#message').html(`<div class="alert alert-success" role="alert">${response.message} </div>`)
-                },
-                error: function(error) {
-                    $(e).html(`Verifikasi user dengan indikator proses`)
-                    alert('Error')
-                    $(e).attr('disabled', false)
-                }
-            })
-        }
-
-        function verificationUserWithoutJob(e) {
-            $(e).html(loader())
-            $(e).attr('disabled', true)
-            $('#message').html('')
-
-            $.ajax({
-                url: `{{ route('verification') }}`,
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                },
-                data: {
-                    'type': 'without_job'
-                },
-                success: function(response) {
-                    $('#message').html(`<div class="alert alert-success" role="alert">${response.message} </div>`)
-                    $(e).attr('disabled', false)
-                    $(e).html(`Unverifikasi user tanpa indikator proses`)
-                },
-                error: function(error) {
-                    $(e).html(`Unverifikasi user tanpa indikator proses`)
-                    alert('Error')
-                    $(e).attr('disabled', false)
-                }
-            })
-        }
 
         function importUser(e) {
             $('#message').html('')
@@ -225,13 +167,6 @@
             $('#data-table').DataTable().clear().destroy()
             initializeTable()
         }
-
-        function loader() {
-            return `<div id="spinner" class="spinner-border text-white spinner-border-sm" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>`
-        }
-
     </script>
 </body>
 </html>
