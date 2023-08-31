@@ -76,6 +76,9 @@
                 $('#button-verif').html(`Verifikasi user dengan indikator proses`)
                 $('title').text(`Users`)
                 $('#button-verif').attr('disabled', false)
+                $('#dynamic').attr('aria-valuenow', 0)
+                $('#dynamic').css("width", `0%`)
+                $('#current-progress').text(`0 %`)
 
                 $('#form').removeClass('d-none')
                 $('#spinner').addClass('d-none')
